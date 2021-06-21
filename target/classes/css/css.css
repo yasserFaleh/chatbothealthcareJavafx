@@ -1,0 +1,6 @@
+.conteneurMessages:filled:selected:focused,
+.conteneurMessages:filled:selected,
+.conteneurMessages:even,
+.conteneurMessages:odd {
+  -fx-background-color: white;
+}
