@@ -20,6 +20,8 @@ public class App extends Application {
         scene.getStylesheets().add(getClass().getResource("/css/css.css").toString());
         stage.setScene(scene);
         
+        
+        stage.setTitle("Healthcare bot");
         stage.setHeight(500);
         stage.setWidth(400);
         stage.setResizable(false);

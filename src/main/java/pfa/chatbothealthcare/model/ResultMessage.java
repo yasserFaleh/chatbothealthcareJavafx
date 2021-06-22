@@ -19,44 +19,57 @@ public class ResultMessage extends HBox {
 	private List<String> precautions;
 	
 	public ResultMessage(List<Disease> diseases ,List<String> precautions) {
-		this.diseases 		= diseases;
-		this.precautions 	= precautions;
-		conteneur 			= new VBox();
-		conteneur.setPadding(new Insets(10));
-		
-		conteneur.setPrefWidth(300);
-		conteneur.setMinWidth(300);
-		CornerRadii corn = new CornerRadii(10);
-		conteneur.setBackground(new Background(new  BackgroundFill(Color.web("#fce4ec"),corn,null)));
+		if ( diseases != null && diseases.size() > 0) {
+			this.diseases 		= diseases;
+			this.precautions 	= precautions;
+			conteneur 			= new VBox();
+			conteneur.setPadding(new Insets(10));
 			
-		Label lab = new Label("You may have :");
-		lab.setStyle("-fx-font-weight : bold;");
-		
-		conteneur.getChildren().add(lab);
-		for ( Disease ds : diseases ) {
-			Label lb = new Label(ds.getName());
-			lb.setTextFill(Color.web("#ff1744"));
-			conteneur.getChildren().add(lb);
+			conteneur.setPrefWidth(300);
+			conteneur.setMinWidth(300);
+			CornerRadii corn = new CornerRadii(10);
+			conteneur.setBackground(new Background(new  BackgroundFill(Color.web("#fce4ec"),corn,null)));
+				
+			Label lab = new Label("You may have :");
+			lab.setStyle("-fx-font-weight : bold;");
 			
-			Label desc = new Label(ds.getDescription());
-			desc.setMaxWidth(300);
-			desc.setWrapText(true);
-			conteneur.getChildren().add(desc);
+			conteneur.getChildren().add(lab);
+			for ( Disease ds : diseases ) {
+				Label lb = new Label(ds.getName());
+				lb.setTextFill(Color.web("#ff1744"));
+				conteneur.getChildren().add(lb);
+				
+				Label desc = new Label(ds.getDescription());
+				desc.setMaxWidth(300);
+				desc.setWrapText(true);
+				conteneur.getChildren().add(desc);
+			}
+			
+			
+		
+			Label lab1 = new Label("Take following measures :");
+			lab1.setStyle("-fx-font-weight : bold;");
+			
+			conteneur.getChildren().add(lab1);
+			
+			for ( String st : precautions) {
+				Label l = new Label("- "+st);
+				l.setTextFill(Color.GREEN);
+				l.setStyle("-fx-font-weight : bold;");
+				conteneur.getChildren().add(l);
+			}
+			this.getChildren().addAll(img,conteneur);
+			
+		}else {
+			this.setSpacing(10);
+			Label message = new Label("Sorry i couldn't recognise this symptom please try again and try an other one");
+			message.setWrapText(true);
+			message.setPadding(new Insets(10));
+			CornerRadii corn = new CornerRadii(10);
+			message.setBackground(new Background(new  BackgroundFill(Color.web("#fce4ec"),corn,null)));
+			message.setMaxWidth(200);
+			message.setStyle("-fx-font-weight: bold;");
+			this.getChildren().addAll(img,message);
 		}
-		
-		
-	
-		Label lab1 = new Label("Take following measures :");
-		lab1.setStyle("-fx-font-weight : bold;");
-		
-		conteneur.getChildren().add(lab1);
-		
-		for ( String st : precautions) {
-			Label l = new Label("- "+st);
-			l.setTextFill(Color.web("#76ff03"));
-			conteneur.getChildren().add(l);
 		}
-		this.getChildren().addAll(img,conteneur);
-		
 	}
-}
