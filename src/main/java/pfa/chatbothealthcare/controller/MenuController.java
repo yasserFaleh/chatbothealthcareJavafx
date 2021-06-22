@@ -63,7 +63,8 @@ public class MenuController implements Initializable{
 	
 	private boolean 			askingMode=true;
     
-	
+	private Socket 				socket;
+	private Thread 				listener;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -87,12 +88,8 @@ public class MenuController implements Initializable{
 
 	
 	
-	
-	
-	
-	
-	private void startListening() {
-		Thread listener = new Thread(new Runnable() {
+	public Thread initThreadListener() {
+		return new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -127,6 +124,18 @@ public class MenuController implements Initializable{
 				
 			}
 		});
+	}
+	
+	
+	private void stopListening() {
+		if( listener != null)
+			listener.stop();
+		listener = null;
+	}
+		
+	private void startListening() {
+		stopListening();
+		listener =  initThreadListener();
 		listener.start();
 		
 	}
@@ -190,6 +199,7 @@ public class MenuController implements Initializable{
 					addUserMessage(messageUser.getText());
 	 				messageUser.setText("");
 	    			askingMode = false;
+	    			addBotMessage("Are you experiencing any :");	
 	    		 }else {
 	    			addUserMessage(messageUser.getText());
 	    		 }
@@ -198,7 +208,22 @@ public class MenuController implements Initializable{
 		});
 		reload.setOnMouseClicked( e->{
 			items.clear();
-			addBotMessage("Hello, I am a healthcare bot. Please enter the symptom you are experiencing : ");
+			askingMode = true;
+			if (socket != null) {
+				try {
+					socket.close();
+					initCommunicationWithServer();
+					startListening();
+					addBotMessage("Hello, I am a healthcare bot. Please enter the symptom you are experiencing : ");
+					
+				} catch (IOException e1) {
+					addBotMessage("Serveur ne réponds pas, réessayer!");
+				} catch (Exception e1) {
+					addBotMessage("Serveur ne réponds pas, réessayer!");
+				}
+				
+			}
+			
 		});
 		
 		
@@ -247,7 +272,7 @@ public class MenuController implements Initializable{
 	}
 	
 	private Socket etablirConnection(String ip , int port) throws Exception {
-		Socket socket= new Socket(ip, port);
+		socket= new Socket(ip, port);
 		
 
 		reader = new BufferedInputStream(socket.getInputStream());
